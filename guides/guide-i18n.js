@@ -1,7 +1,8 @@
 (function () {
   const supported = ['ko', 'en', 'ja', 'es'];
   const browser = (navigator.language || 'en').toLowerCase().split('-')[0];
-  const lang = supported.includes(browser) ? browser : 'en';
+  const forced = new URLSearchParams(location.search).get('lang')?.toLowerCase();
+  const lang = supported.includes(forced) ? forced : (supported.includes(browser) ? browser : 'en');
   const guide = document.querySelector('[data-guide]')?.dataset.guide;
   const names = { chaturbate: 'Chaturbate', stripchat: 'Stripchat', soop: 'SOOP', chzzk: 'CHZZK', youtube: 'YouTube Live', tiktok: 'TikTok LIVE', twitch: 'Twitch' };
   const copy = {
