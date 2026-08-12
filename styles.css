@@ -6,13 +6,17 @@ main { width: 100%; max-width: 1240px; min-width: 0; }
 .hero, .how-section, .ecosystem, .why { width: 100%; min-width: 0; }
 .hero > *, .how-intro > *, .ecosystem-heading > *, .why-content > * { min-width: 0; }
 .hero h1, .hero-lede, .how-intro h2, .how-intro p, .ecosystem-heading h2, .ecosystem-heading p, .why h2, .why p, .world-card { writing-mode: horizontal-tb; word-break: normal; overflow-wrap: break-word; }
-.world-grid { width: 100%; min-width: 0; grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.world-grid { width: 100%; min-width: 0; }
 .world-card { width: auto; min-width: 0; flex: 0 1 auto; }
 
 @media (min-width: 1200px) {
   main { width: min(1240px, calc(100vw - 60px)); min-width: 1000px; }
   .hero { grid-template-columns: minmax(0, 48%) minmax(0, 52%); }
+  .world-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
   .ecosystem { width: 100vw; margin-left: calc(50% - 50vw); margin-right: calc(50% - 50vw); }
   .ecosystem > * { width: min(1180px, calc(100vw - 60px)); margin-left: auto; margin-right: auto; }
   .ecosystem .world-grid { width: min(1180px, calc(100vw - 60px)); }
 }
+
+@media (min-width: 701px) and (max-width: 1199px) { .world-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 700px) { .world-grid { grid-template-columns: 1fr; } }
