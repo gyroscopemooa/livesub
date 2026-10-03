@@ -414,9 +414,8 @@ def sitemap():
     rows = ''
     for p in paths:
         for lang in ('ko', 'en'):
-            alts = f'<xhtml:link rel="alternate" hreflang="ko" href="{SITE}{p}"/><xhtml:link rel="alternate" hreflang="en" href="{SITE}/en{p}"/>'
-            rows += f'  <url><loc>{SITE}{url(lang, p)}</loc><lastmod>{TODAY}</lastmod>{alts}</url>\n'
-    write('sitemap.xml', f'<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">\n{rows}</urlset>\n')
+            rows += f'  <url><loc>{SITE}{url(lang, p)}</loc><lastmod>{TODAY}</lastmod></url>\n'
+    write('sitemap.xml', f'<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n{rows}</urlset>\n')
 
 
 for lang in ('ko', 'en'):
