@@ -34,3 +34,5 @@ main { width: 100%; max-width: 1240px; min-width: 0; }
 .world-cta b{font-size:16px;font-weight:400}
 @media (min-width:1200px){.ecosystem .world-grid{grid-template-columns:repeat(12,minmax(0,1fr))}.world-card{grid-column:span 3}.world-card:nth-child(n+5){grid-column:span 4}}
 @media (min-width:701px) and (max-width:1199px){.world-card:last-child:nth-child(odd){grid-column:1/-1}}
+
+.family-seo{margin-top:48px;color:#8d909b;font-size:13px;line-height:1.8}.family-seo h3{font-size:14px;margin:0 0 10px;color:#c9ccd5}.family-seo ul{list-style:none;padding:0;margin:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:4px 24px}.family-seo a{color:#c9ccd5;text-decoration:none}.family-seo a:hover{color:#a5ff74}
