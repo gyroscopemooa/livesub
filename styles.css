@@ -20,3 +20,17 @@ main { width: 100%; max-width: 1240px; min-width: 0; }
 
 @media (min-width: 701px) and (max-width: 1199px) { .world-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 700px) { .world-grid { grid-template-columns: 1fr; } }
+
+/* Universe: seven cards (4 + 3 on desktop, 2-col tablet, 1-col mobile) */
+.world-new{display:flex;flex-direction:column}
+.world-new h3{margin-top:48px}
+.world-new .world-foot{margin-top:auto;padding-top:16px}
+.world-ssrrr{background:linear-gradient(135deg,#172327,#171d22);border:1px solid #2f4a50;--wl:#2f4a50;--wt:#a9d6d9}
+.world-hongbo{background:linear-gradient(135deg,#25231a,#1d1c15);border:1px solid #4d4a2e;--wl:#4d4a2e;--wt:#d6d3a3}
+.world-matda{background:linear-gradient(135deg,#1b2030,#161a27);border:1px solid #34405e;--wl:#34405e;--wt:#b4c0e6}
+.world-chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}
+.world-chips span{font-size:10px;border:1px solid var(--wl);padding:7px 9px;border-radius:20px;color:var(--wt)}
+.world-cta{padding-top:12px;border-top:1px solid var(--wl);color:var(--wt);font-size:11px;display:flex;justify-content:space-between;align-items:center}
+.world-cta b{font-size:16px;font-weight:400}
+@media (min-width:1200px){.ecosystem .world-grid{grid-template-columns:repeat(12,minmax(0,1fr))}.world-card{grid-column:span 3}.world-card:nth-child(n+5){grid-column:span 4}}
+@media (min-width:701px) and (max-width:1199px){.world-card:last-child:nth-child(odd){grid-column:1/-1}}
