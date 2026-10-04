@@ -6,7 +6,7 @@ Edit the data below, rebuild, commit the generated HTML.
 import json, os, datetime
 
 SITE = 'https://live-sub.com'
-CSS_V = 'r3'
+CSS_V = 'r4'
 TODAY = datetime.date.today().isoformat()
 BOT_RE = 'bot|crawl|spider|slurp|google|bing|naver|yeti|daum|lighthouse|facebookexternalhit'
 
@@ -165,6 +165,72 @@ L = {
 }
 PLAY = 'https://play.google.com/store/apps/details?id=com.healthyroutine.app'
 
+# ---------------------------------------------------------------- languages
+import sys
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+TX = {}
+for _m in ('i18n_1', 'i18n_2', 'i18n_3', 'i18n_4'):
+    TX.update(__import__(_m).T)
+
+LANGS = [  # code, native name, og locale
+    ('ko', '한국어', 'ko_KR'), ('en', 'English', 'en_US'), ('ja', '日本語', 'ja_JP'), ('zh', '简体中文', 'zh_CN'),
+    ('es', 'Español', 'es_ES'), ('pt', 'Português', 'pt_BR'), ('fr', 'Français', 'fr_FR'), ('de', 'Deutsch', 'de_DE'),
+    ('it', 'Italiano', 'it_IT'), ('ru', 'Русский', 'ru_RU'), ('hi', 'हिन्दी', 'hi_IN'), ('id', 'Bahasa Indonesia', 'id_ID'),
+    ('vi', 'Tiếng Việt', 'vi_VN'), ('ar', 'العربية', 'ar_AR'), ('fa', 'فارسی', 'fa_IR'), ('tr', 'Türkçe', 'tr_TR'),
+    ('nl', 'Nederlands', 'nl_NL'), ('th', 'ไทย', 'th_TH'),
+]
+CODES = [c[0] for c in LANGS]
+RTL = {'ar', 'fa'}
+FONTS = {'ar': 'Noto+Sans+Arabic', 'fa': 'Noto+Sans+Arabic', 'th': 'Noto+Sans+Thai', 'hi': 'Noto+Sans+Devanagari'}
+# Cloudflare /cdn-cgi/trace "loc" -> language, used when the device language is not one we publish
+COUNTRY = {
+    'ko': 'KR KP', 'ja': 'JP', 'zh': 'CN TW HK MO', 'es': 'ES MX AR CO CL PE VE EC GT CU BO DO HN PY SV NI CR PA UY PR GQ',
+    'pt': 'BR PT AO MZ CV GW ST', 'fr': 'FR MC SN CI CM CD MG ML BF NE TD GN HT BJ TG GA CG DJ', 'de': 'DE AT CH LI', 'it': 'IT SM VA',
+    'ru': 'RU BY KZ KG', 'hi': 'IN', 'id': 'ID', 'vi': 'VN', 'tr': 'TR', 'nl': 'NL BE SR', 'th': 'TH', 'fa': 'IR AF',
+    'ar': 'SA AE EG IQ JO KW LB LY MA DZ TN OM QA BH YE SD SY PS MR',
+}
+COUNTRY_MAP = {c: lang for lang, cs in COUNTRY.items() for c in cs.split()}
+TZ_MAP = {'Asia/Seoul': 'ko', 'Asia/Tokyo': 'ja', 'Asia/Shanghai': 'zh', 'Asia/Hong_Kong': 'zh', 'Asia/Taipei': 'zh', 'America/Sao_Paulo': 'pt', 'Europe/Lisbon': 'pt',
+          'Europe/Madrid': 'es', 'America/Mexico_City': 'es', 'America/Bogota': 'es', 'America/Argentina/Buenos_Aires': 'es', 'America/Santiago': 'es', 'America/Lima': 'es',
+          'Europe/Paris': 'fr', 'Europe/Berlin': 'de', 'Europe/Vienna': 'de', 'Europe/Zurich': 'de', 'Europe/Rome': 'it', 'Europe/Moscow': 'ru', 'Asia/Kolkata': 'hi',
+          'Asia/Calcutta': 'hi', 'Asia/Jakarta': 'id', 'Asia/Ho_Chi_Minh': 'vi', 'Asia/Saigon': 'vi', 'Asia/Riyadh': 'ar', 'Asia/Dubai': 'ar', 'Africa/Cairo': 'ar',
+          'Asia/Tehran': 'fa', 'Europe/Istanbul': 'tr', 'Europe/Amsterdam': 'nl', 'Asia/Bangkok': 'th'}
+
+
+def _make_lang(code):
+    t = TX[code]
+    d = dict(L['en'])
+    d.update(prefix='/' + code, nav=t['nav'], open=t['open'], start=t['start'], annb=t['annb'], ann=t['ann'], fdesc=t['fdesc'], fh=t['fh'], contact=t['contact'],
+             home_title=t['ht'], home_desc=t['hd'], pill=t['pill'], h1=f'{t["h1"][0]}<br><span class="grad">{t["h1"][1]}</span>', lede=t['lede'], cta2=t['cta2'],
+             src='Good morning everyone, today we have something new to share.',
+             caps=[(code.upper(), t['caps'][0]), ('KO' if code == 'ja' else 'EN', t['caps'][1]), ('ES' if code == 'ja' else 'JA', t['caps'][2])],
+             f1=('AI TRANSLATION', t['rt']), f2=('LANGUAGES', t['l40']), viewers=t['viewers'], plat=t['plat'],
+             howH=f'{t["howH"][0]} <span>{t["howH"][1]}</span>', howS=t['howS'], steps=[(g, h, p) for g, (h, p) in zip('◉≋↗', t['steps'])],
+             famH=f'{t["famH"][0]} <span>{t["famH"][1]}</span>', famS=t['famS'], trans_desc=t['td'], trans_chips=t['chips'],
+             gH=f'{t["gH"][0]} <span>{t["gH"][1]}</span>', gAll=t['gAll'], fin=f'{t["fin"][0]}<br>{t["fin"][1]}', finS=t['finS'],
+             g_title=t['gt'], g_desc=t['gd'], g_h1=f'{t["gh1"][0]}<br><span class="grad">{t["gh1"][1]}</span>', g_lede=t['gl'], g_streams=t['gs'], g_meetings=t['gm'], g_note=t['gnote'],
+             gp_title=lambda g, t=t: t['pt'].replace('{n}', g[3]), gp_desc=lambda g, t=t: t['pd'].replace('{n}', g[3]), gp_h1=lambda g, t=t: t['ph'].replace('{n}', g[3]),
+             back=t['back'], need=t['need'], setup=t['setup'], tips=t['tips'], trouble=t['trouble'], faq=t['faq'], related=t['related'],
+             needs=lambda g, t=t: [x.replace('{n}', g[3]) for x in t['needs']], steps_g=lambda g, t=t: [x.replace('{n}', g[3]) for x in t['sg']],
+             trouble_t=t['tt'], faqs=lambda g, t=t: [(q.replace('{n}', g[3]), a.replace('{n}', g[3])) for q, a in t['faqs']],
+             notice=lambda g, t=t: t['notice'].replace('{n}', g[3]),
+             hr_title=t['hrt'], hr_desc=t['hrd'], hr_h1=f'{t["hrh"][0]}<br><span class="grad">{t["hrh"][1]}</span>', hr_lede=t['hrl'], hr_dl=t['hrdl'],
+             hr_f=[(k, h, p) for k, (h, p) in zip(['TRACK', 'ROUTINE', 'HABIT'], t['hrf'])], hr_note=t['hrnote'])
+    return d
+
+
+for _c in CODES:
+    if _c not in ('ko', 'en'):
+        L[_c] = _make_lang(_c)
+
+
+def sdesc(s, lang):
+    return s[4] if lang == 'ko' else s[5] if lang == 'en' else L[lang]['trans_desc'] if s[0] == 'trans' else TX[lang]['sites'][s[0]][0]
+
+
+def schips(s, lang):
+    return s[7] if lang == 'ko' else s[8] if lang == 'en' else TX[lang]['sites'][s[0]][1:]
+
 
 def url(lang, path):  # path like '/guides/'
     return (L[lang]['prefix'] + path) if path.startswith('/') else path
@@ -178,45 +244,50 @@ def sname(s, lang):
     return s[1] if lang == 'ko' else s[2]
 
 
-def lang_script(lang, other_path):
-    # Korean browsers get /, everyone else /en/ — unless they picked a language or are a crawler.
-    want = 'ko' if lang == 'en' else 'en'
-    cond = "l.indexOf('ko')===0" if lang == 'en' else "l&&l.indexOf('ko')!==0"
-    return ('<script>document.documentElement.classList.add("js");(function(){try{var l=(navigator.language||"").toLowerCase();'
+def lang_script(lang, path):
+    # Saved choice wins. Otherwise: device language list, then IP country (Cloudflare trace), then time zone. Crawlers are never redirected.
+    return ('<script>document.documentElement.classList.add("js");(function(){try{'
+            f'var cur="{lang}",path="{path}";'
             f'if(/{BOT_RE}/i.test(navigator.userAgent)||localStorage.getItem("ls_lang"))return;'
-            f'if({cond})location.replace("{other_path}")}}catch(e){{}}}})()</script>')
+            f'var S={json.dumps(CODES)},C={json.dumps(COUNTRY_MAP)},Z={json.dumps(TZ_MAP)};'
+            'function go(c){if(c&&c!==cur)location.replace((c==="ko"?"":"/"+c)+path)}'
+            'var ls=navigator.languages&&navigator.languages.length?navigator.languages:[navigator.language||""];'
+            'for(var i=0;i<ls.length;i++){var b=String(ls[i]).toLowerCase().split("-")[0];if(S.indexOf(b)>-1){go(b);return}}'
+            'function tz(){var z="";try{z=Intl.DateTimeFormat().resolvedOptions().timeZone}catch(e){}go(Z[z]||"en")}'
+            'var ac=window.AbortController?new AbortController():null,t=setTimeout(function(){ac&&ac.abort()},2000);'
+            'fetch("/cdn-cgi/trace",ac?{signal:ac.signal}:{}).then(function(r){return r.text()}).then(function(x){clearTimeout(t);var m=/loc=([A-Z]{2})/.exec(x);if(m&&C[m[1]])go(C[m[1]]);else if(m)go("en");else tz()}).catch(function(){tz()})'
+            '}catch(e){}})()</script>')
 
 
 def head(lang, title, desc, path, alt_path, ld, og_type='website'):
     canon = SITE + url(lang, path)
-    ko_url, en_url = (SITE + path, SITE + '/en' + path)
-    other = url('en' if lang == 'ko' else 'ko', path) if alt_path else None
+    alts = ''.join(f'    <link rel="alternate" hreflang="{c}" href="{SITE}{url(c, path)}" />\n' for c in CODES) + f'    <link rel="alternate" hreflang="x-default" href="{SITE}{url("ko", path)}" />\n'
+    og_locale = [x[2] for x in LANGS if x[0] == lang][0]
+    font = f'    <link href="https://fonts.googleapis.com/css2?family={FONTS[lang]}:wght@400;600;800&display=swap" rel="stylesheet" />\n' if lang in FONTS else ''
+    rtl = ' dir="rtl"' if lang in RTL else ''
     return f'''<!doctype html>
-<html lang="{lang}">
+<html lang="{lang}"{rtl}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#07080b" />
-    {lang_script(lang, other) if other else '<script>document.documentElement.classList.add("js")</script>'}
+    {lang_script(lang, path)}
     <title>{title}</title>
     <meta name="description" content="{desc}" />
     <meta name="robots" content="index, follow" />
     <link rel="canonical" href="{canon}" />
-    <link rel="alternate" hreflang="ko" href="{ko_url}" />
-    <link rel="alternate" hreflang="en" href="{en_url}" />
-    <link rel="alternate" hreflang="x-default" href="{ko_url}" />
-    <meta property="og:type" content="{og_type}" />
+{alts}    <meta property="og:type" content="{og_type}" />
     <meta property="og:site_name" content="live sub" />
     <meta property="og:title" content="{title}" />
     <meta property="og:description" content="{desc}" />
     <meta property="og:url" content="{canon}" />
-    <meta property="og:locale" content="{'ko_KR' if lang == 'ko' else 'en_US'}" />
+    <meta property="og:locale" content="{og_locale}" />
     <meta name="twitter:card" content="summary_large_image" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
-    <link rel="stylesheet" href="/home.css?v={CSS_V}" />
+{font}    <link rel="stylesheet" href="/home.css?v={CSS_V}" />
     <script type="application/ld+json">{json.dumps(ld, ensure_ascii=False)}</script>
   </head>
   <body>
@@ -224,28 +295,34 @@ def head(lang, title, desc, path, alt_path, ld, og_type='website'):
 '''
 
 
+def lang_menu(lang, path):
+    cur = [n for c, n, _ in LANGS if c == lang][0]
+    items = ''.join('<a href="%s" data-lang="%s" hreflang="%s"%s>%s</a>' % (url(c, path), c, c, ' class="on"' if c == lang else '', n) for c, n, _ in LANGS)
+    return f'<details class="langsw"><summary aria-label="Language">&#9788; {cur}</summary><div class="langmenu">{items}</div></details>'
+
+
 def chrome_top(lang, path):
     d = L[lang]
-    other = url('en' if lang == 'ko' else 'ko', path)
     ann = f'<span>{d["ann"]} — <a href="mailto:support@transtream.app">support@transtream.app</a></span><span>✳</span>'
     home = url(lang, '/')
     return f'''    <div class="announce"><div class="wrap"><b><i class="dot"></i><span>{d["annb"]}</span></b><div class="rail"><div class="track">{ann * 6}</div></div></div></div>
     <header class="header"><div class="wrap"><nav class="nav" aria-label="main">
       <a class="logo" href="{home}"><i><b></b><b></b><b></b></i><em class="wm">live<span>sub</span></em></a>
       <div class="links"><a href="{home}#transtream">{d['nav'][0]}</a><a href="{home}#family">{d['nav'][1]}</a><a href="{url(lang, '/guides/')}">{d['nav'][2]}</a></div>
-      <div style="display:flex;align-items:center;gap:4px"><a class="lang" href="{other}" data-lang="{d['other']}">{d['otherlabel']}</a><a class="btn btn-lime" href="https://transtream.app" target="_blank" rel="noopener">{d['open']} ↗</a></div>
+      <div style="display:flex;align-items:center;gap:4px">{lang_menu(lang, path)}<a class="btn btn-lime" href="https://transtream.app" target="_blank" rel="noopener">{d['open']} ↗</a></div>
     </nav></div></header>
 '''
 
 
 def chrome_bottom(lang, path):
     d = L[lang]
-    other = url('en' if lang == 'ko' else 'ko', path)
+    flangs = ''.join('<a href="%s" data-lang="%s" hreflang="%s">%s</a>' % (url(c, path), c, c, n) for c, n, _ in LANGS)
     flinks = ''.join(f'<li><a href="{url(lang, s[3])}">{sname(s, lang)}</a></li>' for s in SITES)
     return f'''    <footer><div class="wrap">
       <div class="fgrid"><div><a class="logo" href="{url(lang, '/')}"><i><b></b><b></b><b></b></i><em class="wm">live<span>sub</span></em></a><p style="max-width:340px;margin-top:14px">{d['fdesc']}</p></div>
         <div><h4>{d['fh'][0]}</h4><ul>{flinks}</ul></div>
-        <div><h4>{d['fh'][1]}</h4><ul><li><a href="{url(lang, '/guides/')}">{d['nav'][2]}</a></li><li><a href="{other}" data-lang="{d['other']}">{d['otherfull']}</a></li><li><a href="mailto:support@transtream.app">{d['contact']}</a></li></ul></div></div>
+        <div><h4>{d['fh'][1]}</h4><ul><li><a href="{url(lang, '/guides/')}">{d['nav'][2]}</a></li><li><a href="mailto:support@transtream.app">{d['contact']}</a></li></ul></div></div>
+      <div class="flangs">{flangs}</div>
       <div class="fbot"><span>© 2026 live sub. Stay connected.</span><span class="mono">live-sub.com</span></div>
     </div></footer>
     <script>(function(){{document.querySelectorAll('[data-lang]').forEach(function(a){{a.addEventListener('click',function(){{try{{localStorage.setItem('ls_lang',a.dataset.lang)}}catch(e){{}}}})}});var io=new IntersectionObserver(function(es){{es.forEach(function(e){{if(e.isIntersecting){{e.target.classList.add('in');io.unobserve(e.target)}}}})}},{{threshold:.12}});document.querySelectorAll('.rv').forEach(function(el){{io.observe(el)}})}})()</script>
@@ -284,8 +361,8 @@ def home(lang):
             continue
         i = [x[0] for x in SITES].index(s[0]) + 1
         tag = {'health': 'HEALTH', 'hongbo': 'PROMOTION', 'ssrrr': 'COMMUNITY', 'matda': 'MATCHING', 'tool': 'TOOLS', 'hire': 'HIRING'}[s[0]]
-        desc = s[4] if lang == 'ko' else s[5]
-        chips = ''.join(f'<span>{c}</span>' for c in (s[7] if lang == 'ko' else s[8]))
+        desc = sdesc(s, lang)
+        chips = ''.join(f'<span>{c}</span>' for c in schips(s, lang))
         tiles += f'<a class="tile t-{s[0]} rv" href="{href}"{ext(href)}><span class="tag">0{i} · {tag}</span><span class="go">→</span><h3>{sname(s, lang)}<small>{s[6]}</small></h3><p>{desc}</p><div class="chips">{chips}</div></a>'
     steps = ''.join(f'<article class="step rv"><span class="n">0{i + 1}</span><span class="glyph">{g}</span><h3>{h}</h3><p>{p}</p></article>' for i, (g, h, p) in enumerate(d['steps']))
     langchips = ''.join(f'<span{" class=on" if i == 0 else ""}>{c[0]}</span>' for i, c in enumerate(d['caps']))
@@ -293,7 +370,7 @@ def home(lang):
     plist = ''.join(f'<a href="{url(lang, "/guides/" + g[0] + "-live-translation/")}">{gname(g, lang)}</a>' for g in GUIDES[:7])
     glist = ''.join(f'<a href="{url(lang, "/guides/" + g[0] + "-live-translation/")}">{gname(g, lang)}<span>→</span></a>' for g in GUIDES[:9])
     caps = json.dumps([c[1] for c in d['caps']], ensure_ascii=False)
-    items = [{"@type": "ListItem", "position": i + 1, "item": {"@type": "MobileApplication" if s[0] == 'health' else "WebSite", "name": sname(s, lang), "alternateName": ALT.get(sname(s, lang), ''), "url": (SITE + url(lang, s[3])) if s[3].startswith('/') else s[3], "description": s[4] if lang == 'ko' else s[5]}} for i, s in enumerate(SITES)]
+    items = [{"@type": "ListItem", "position": i + 1, "item": {"@type": "MobileApplication" if s[0] == 'health' else "WebSite", "name": sname(s, lang), "alternateName": ALT.get(sname(s, lang), ''), "url": (SITE + url(lang, s[3])) if s[3].startswith('/') else s[3], "description": sdesc(s, lang)}} for i, s in enumerate(SITES)]
     ld = {"@context": "https://schema.org", "@graph": [org_ld(lang), {"@type": "WebSite", "@id": SITE + "/#website", "name": "live sub", "url": SITE + "/", "inLanguage": lang, "publisher": {"@id": SITE + "/#org"}}, {"@type": "ItemList", "name": "live sub family sites", "itemListElement": items}]}
     html = head(lang, d['home_title'], d['home_desc'], '/', True, ld) + chrome_top(lang, '/') + f'''    <main>
       <section class="hero" id="transtream"><div class="gridbg"></div><div class="wrap">
@@ -413,16 +490,16 @@ def sitemap():
     paths = ['/', '/guides/', '/healthyroutine/'] + [f"/guides/{g[0]}-live-translation/" for g in GUIDES]
     rows = ''
     for p in paths:
-        for lang in ('ko', 'en'):
+        for lang in CODES:
             rows += f'  <url><loc>{SITE}{url(lang, p)}</loc><lastmod>{TODAY}</lastmod></url>\n'
     write('sitemap.xml', f'<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n{rows}</urlset>\n')
 
 
-for lang in ('ko', 'en'):
+for lang in CODES:
     home(lang)
     guides_index(lang)
     healthy(lang)
     for g in GUIDES:
         guide_page(lang, g)
 sitemap()
-print('built', 2 * (3 + len(GUIDES)), 'pages')
+print('built', len(CODES) * (3 + len(GUIDES)), 'pages')
