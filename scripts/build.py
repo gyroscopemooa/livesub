@@ -6,7 +6,7 @@ Edit the data below, rebuild, commit the generated HTML.
 import json, os, datetime
 
 SITE = 'https://live-sub.com'
-CSS_V = 'r4'
+CSS_V = 'r5'
 TODAY = datetime.date.today().isoformat()
 BOT_RE = 'bot|crawl|spider|slurp|google|bing|naver|yeti|daum|lighthouse|facebookexternalhit'
 
