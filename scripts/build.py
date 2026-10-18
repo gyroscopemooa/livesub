@@ -304,7 +304,7 @@ def lang_menu(lang, path):
 
 def chrome_top(lang, path):
     d = L[lang]
-    ann = f'<span>{d["ann"]} — <a href="mailto:support@transtream.app">support@transtream.app</a></span><span>✳</span>'
+    ann = f'<span>{d["ann"]} — <a href="mailto:support@live-sub.com">support@live-sub.com</a></span><span>✳</span>'
     home = url(lang, '/')
     return f'''    <div class="announce"><div class="wrap"><b><i class="dot"></i><span>{d["annb"]}</span></b><div class="rail"><div class="track">{ann * 6}</div></div></div></div>
     <header class="header"><div class="wrap"><nav class="nav" aria-label="main">
@@ -324,7 +324,7 @@ def chrome_bottom(lang, path):
         <div><h4>{d['fh'][0]}</h4><ul>{flinks}</ul></div>
         <div><h4>{d['fh'][1]}</h4><ul><li><a href="{url(lang, '/guides/')}">{d['nav'][2]}</a></li><li><a href="/company/">회사소개</a></li><li><a href="/contact/">문의</a></li></ul></div></div>
       <div class="flangs">{flangs}</div>
-      <div class="fbot"><span>© 2026 live sub. Stay connected.</span><span><a href="mailto:support@transtream.app">support@transtream.app</a> · <span class="mono">live-sub.com</span></span></div>
+      <div class="fbot"><span>© 2026 live sub. Stay connected.</span><span><a href="mailto:support@live-sub.com">support@live-sub.com</a> · <span class="mono">live-sub.com</span></span></div>
     </div></footer>
     <script>(function(){{document.querySelectorAll('[data-lang]').forEach(function(a){{a.addEventListener('click',function(){{try{{localStorage.setItem('ls_lang',a.dataset.lang)}}catch(e){{}}}})}});var io=new IntersectionObserver(function(es){{es.forEach(function(e){{if(e.isIntersecting){{e.target.classList.add('in');io.unobserve(e.target)}}}})}},{{threshold:.12}});document.querySelectorAll('.rv').forEach(function(el){{io.observe(el)}})}})()</script>
 '''
@@ -346,7 +346,7 @@ def gname(g, lang):
 
 
 def org_ld(lang):
-    return {"@type": "Organization", "@id": SITE + "/#org", "name": "live sub", "alternateName": ["라이브서브", "livesub"], "url": SITE + "/", "email": "support@transtream.app",
+    return {"@type": "Organization", "@id": SITE + "/#org", "name": "live sub", "alternateName": ["라이브서브", "livesub"], "url": SITE + "/", "email": "support@live-sub.com",
             "sameAs": [s[3] for s in SITES if s[3].startswith('http')] + [PLAY]}
 
 
