@@ -19,8 +19,9 @@ SITES = [  # key, ko name, en name, url, ko desc, en desc, domain suffix, chips 
     ('matda', '맡다', 'MATDA', 'https://matda.net/', '일을 올리고 업체·전문가 견적을 비교하는 업무 매칭.', 'Post a job and compare quotes from companies and experts.', '.net', ['견적 비교', 'B2B'], ['Quotes', 'B2B']),
     ('tool', 'manytool', 'manytool', 'https://manytool.net/', 'FPS 감도, 롤 챔프, 컬러 추천 — 작지만 유용한 도구 모음.', 'FPS sensitivity, LoL champs, color picks — small, useful tools.', '.net', ['FPS 감도', '컬러'], ['FPS', 'Color']),
     ('hire', 'hireroom', 'hireroom', 'https://hireroom.net/', '중소기업도 쉽게 만드는 우리 회사만의 채용 페이지.', 'Career pages any small business can build in minutes.', '.net', ['채용 페이지', 'HR'], ['Careers', 'HR']),
+    ('infl09', '인플공구', 'INFL09', 'https://infl09.com/', '인플루언서와 팬을 잇고, 검증한 상품을 함께 만나는 공동구매 플랫폼.', 'A group-buying platform connecting influencers with their fans.', '.com', ['공동구매', '인플루언서'], ['Group buying', 'Influencers']),
 ]
-ALT = {'Transtream': '트랜스트림', '헬띠루틴': 'Healthy Routine', 'Healthy Routine': '헬띠루틴', '더홍보': 'THE HONGBO', 'THE HONGBO': '더홍보', 'SSRRR': '스르륵', '맡다': 'MATDA', 'MATDA': '맡다', 'manytool': '매니툴', 'hireroom': '하이어룸'}
+ALT = {'Transtream': '트랜스트림', '헬띠루틴': 'Healthy Routine', 'Healthy Routine': '헬띠루틴', '더홍보': 'THE HONGBO', 'THE HONGBO': '더홍보', 'SSRRR': '스르륵', '맡다': 'MATDA', 'MATDA': '맡다', 'manytool': '매니툴', 'hireroom': '하이어룸', '인플공구': 'INFL09', 'INFL09': '인플공구'}
 
 # ---------------------------------------------------------------- guides
 # slug, kind, ko name, en name, ko search phrase, ko intro, en intro, ko tips, en tips
@@ -84,8 +85,8 @@ L = {
   nav=['Transtream', '패밀리 사이트', '플랫폼 가이드'], open='Transtream 열기', start='Transtream 시작하기',
   ann='광고 · 브랜드 제휴 · 콘텐츠 협업 문의', annb='제휴 모집 중',
   fdesc='live sub는 언어, 일, 생활을 잇는 작은 서비스들을 만드는 팀입니다.', fh=['패밀리 사이트', '바로가기'], contact='제휴 문의',
-  home_title='live sub | 트랜스트림·헬띠루틴·더홍보·SSRRR·맡다 패밀리 사이트',
-  home_desc='live sub 패밀리 사이트 — 트랜스트림(Transtream) 실시간 자막 번역, 헬띠루틴 운동 기록 앱, 더홍보 홍보 플랫폼, SSRRR 커뮤니티, 맡다 견적 매칭, 매니툴, 하이어룸을 한곳에서.',
+  home_title='live sub | 트랜스트림·헬띠루틴·인플공구 패밀리 사이트',
+  home_desc='live sub 패밀리 사이트 — 트랜스트림 실시간 자막 번역, 헬띠루틴 운동 기록, 더홍보, SSRRR, 맡다, 매니툴, 하이어룸, 인플공구 공동구매 플랫폼을 한곳에서.',
   pill='실시간 AI 통역', h1='언어는 달라도,<br><span class="grad">순간은 같게.</span>',
   lede='라이브 방송, 글로벌 미팅, 화상통화. Transtream이 들리는 말을 실시간 자막과 번역으로 바꿔 드립니다.',
   cta2='패밀리 사이트 보기', src='Good morning everyone, today we have something new to share.',
@@ -94,7 +95,7 @@ L = {
   plat='브라우저에서 보는 라이브와 회의 어디서나',
   howE='How it works', howH='세 단계면 <span>충분합니다.</span>', howS='보고 있는 라이브나 회의 탭을 연결하면 바로 자막이 나옵니다.',
   steps=[('◉', '연결', '보고 싶은 라이브나 미팅 탭의 오디오를 Transtream에 연결하세요.'), ('≋', '이해', '실시간 자막과 번역이 대화의 흐름을 놓치지 않게 따라갑니다.'), ('↗', '확장', '언어 걱정 없이 더 많은 사람, 더 넓은 세계와 만나세요.')],
-  famE='live sub family', famH='하나의 팀, <span>일곱 개의 서비스.</span>', famS='라이브를 넘어 일과 생활의 다음 장면까지. 필요한 순간에 꼭 필요한 서비스를 만듭니다.',
+  famE='live sub family', famH='하나의 팀, <span>여덟 개의 서비스.</span>', famS='라이브를 넘어 일과 생활의 다음 장면까지. 필요한 순간에 꼭 필요한 서비스를 만듭니다.',
   trans_desc='라이브 방송과 화상통화를 위한 실시간 자막·번역. 치지직, SOOP, 유튜브, 트위치, 줌 어디서든.', trans_chips=['실시간 자막', '40+ 언어', '브라우저'],
   gE='Platform guides', gH='플랫폼별 <span>번역 가이드.</span>', gAll='전체 가이드',
   fin='지금 보는 라이브,<br>당신의 언어로.', finS='브라우저만 있으면 바로 시작할 수 있습니다.',
@@ -126,8 +127,8 @@ L = {
   nav=['Transtream', 'Family sites', 'Platform guides'], open='Open Transtream', start='Start Transtream',
   ann='Advertising · brand partnerships · content collaboration', annb='Partnerships open',
   fdesc='live sub is a small team building services that connect language, work and life.', fh=['Family sites', 'Links'], contact='Partnerships',
-  home_title='live sub | Transtream, Healthy Routine, THE HONGBO, SSRRR & MATDA',
-  home_desc='live sub family sites: Transtream real-time live stream translation, Healthy Routine workout tracker, THE HONGBO promotion platform, SSRRR community, MATDA quote matching, manytool and hireroom.',
+  home_title='live sub | Transtream, Healthy Routine, INFL09 & family sites',
+  home_desc='live sub family sites: Transtream live translation, Healthy Routine, THE HONGBO, SSRRR, MATDA, manytool, hireroom and the INFL09 influencer group-buying platform.',
   pill='Real-time AI interpretation', h1='Different language.<br><span class="grad">Same moment.</span>',
   lede='Live streams, global meetings, video calls. Transtream turns what you hear into real-time captions and translation.',
   cta2='Explore family sites', src='좋은 아침이에요 여러분, 오늘은 새로운 소식을 전해드릴게요.',
@@ -136,7 +137,7 @@ L = {
   plat='Works with live streams and meetings in your browser',
   howE='How it works', howH='Three steps. <span>That’s it.</span>', howS='Connect the stream or meeting tab you’re on and captions appear.',
   steps=[('◉', 'Connect', 'Point Transtream at the audio of the live stream or meeting tab.'), ('≋', 'Understand', 'Real-time captions and translation keep up with every line.'), ('↗', 'Go further', 'Meet more people across the world without the language barrier.')],
-  famE='live sub family', famH='One team. <span>Seven useful worlds.</span>', famS='Beyond live streams — services for the next moments of work and everyday life.',
+  famE='live sub family', famH='One team. <span>Eight useful worlds.</span>', famS='Beyond live streams — services for the next moments of work and everyday life.',
   trans_desc='Real-time captions and translation for live streams and video calls — YouTube, Twitch, CHZZK, SOOP, Zoom and more.', trans_chips=['Live captions', '40+ languages', 'Browser'],
   gE='Platform guides', gH='Translation guides <span>by platform.</span>', gAll='All guides',
   fin='The stream you’re watching,<br>in your language.', finS='All you need is a browser.',
@@ -225,11 +226,11 @@ for _c in CODES:
 
 
 def sdesc(s, lang):
-    return s[4] if lang == 'ko' else s[5] if lang == 'en' else L[lang]['trans_desc'] if s[0] == 'trans' else TX[lang]['sites'][s[0]][0]
+    return s[4] if lang == 'ko' else s[5] if lang == 'en' else L[lang]['trans_desc'] if s[0] == 'trans' else TX[lang]['sites'].get(s[0], [s[5]])[0]
 
 
 def schips(s, lang):
-    return s[7] if lang == 'ko' else s[8] if lang == 'en' else TX[lang]['sites'][s[0]][1:]
+    return s[7] if lang == 'ko' else s[8] if lang == 'en' else TX[lang]['sites'].get(s[0], [s[5], *s[8]])[1:]
 
 
 def url(lang, path):  # path like '/guides/'
@@ -360,7 +361,7 @@ def home(lang):
             tiles += f'<a class="tile t-trans rv" href="{href}"{ext(href)}><span class="tag">01 · LIVE &amp; LANGUAGE</span><span class="go">→</span><h3>Transtream<small>.app</small></h3><p>{d["trans_desc"]}</p><div class="mini-cap"><div><b>EN</b>Welcome back to the stream!</div><div><b>KO</b>다시 방송에 오신 걸 환영해요!</div></div><div class="chips">{chips}</div></a>'
             continue
         i = [x[0] for x in SITES].index(s[0]) + 1
-        tag = {'health': 'HEALTH', 'hongbo': 'PROMOTION', 'ssrrr': 'COMMUNITY', 'matda': 'MATCHING', 'tool': 'TOOLS', 'hire': 'HIRING'}[s[0]]
+        tag = {'health': 'HEALTH', 'hongbo': 'PROMOTION', 'ssrrr': 'COMMUNITY', 'matda': 'MATCHING', 'tool': 'TOOLS', 'hire': 'HIRING', 'infl09': 'GROUP BUYING'}[s[0]]
         desc = sdesc(s, lang)
         chips = ''.join(f'<span>{c}</span>' for c in schips(s, lang))
         tiles += f'<a class="tile t-{s[0]} rv" href="{href}"{ext(href)}><span class="tag">0{i} · {tag}</span><span class="go">→</span><h3>{sname(s, lang)}<small>{s[6]}</small></h3><p>{desc}</p><div class="chips">{chips}</div></a>'

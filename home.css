@@ -96,7 +96,7 @@ section.sec{padding:120px 0 0}
 .t-trans{grid-column:span 4;grid-row:span 2;--c:var(--lime)}.t-trans h3{font-size:clamp(40px,5.6vw,72px)}
 .t-health{grid-column:span 2;--c:#7dffb3}.t-hongbo{grid-column:span 2;--c:var(--orange)}
 .t-ssrrr{grid-column:span 2;--c:var(--pink)}.t-matda{grid-column:span 2;--c:var(--sky)}
-.t-tool{grid-column:span 2;--c:var(--violet)}.t-hire{grid-column:span 2;--c:#ffd84d}
+.t-tool{grid-column:span 2;--c:var(--violet)}.t-hire{grid-column:span 2;--c:#ffd84d}.t-infl09{grid-column:span 2;--c:#ff7043}
 .mini-cap{margin-top:22px;display:grid;gap:8px;max-width:420px}
 .mini-cap div{font-size:14px;padding:10px 14px;border-radius:12px;background:rgba(0,0,0,.35);border:1px solid var(--line)}
 .mini-cap div b{font-family:'DM Mono',monospace;font-size:11px;color:var(--lime);margin-right:10px}
