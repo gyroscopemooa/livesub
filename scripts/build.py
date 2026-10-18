@@ -322,9 +322,9 @@ def chrome_bottom(lang, path):
     return f'''    <footer><div class="wrap">
       <div class="fgrid"><div><a class="logo" href="{url(lang, '/')}"><i><b></b><b></b><b></b></i><em class="wm">live<span>sub</span></em></a><p style="max-width:340px;margin-top:14px">{d['fdesc']}</p></div>
         <div><h4>{d['fh'][0]}</h4><ul>{flinks}</ul></div>
-        <div><h4>{d['fh'][1]}</h4><ul><li><a href="{url(lang, '/guides/')}">{d['nav'][2]}</a></li><li><a href="mailto:support@transtream.app">{d['contact']}</a></li></ul></div></div>
+        <div><h4>{d['fh'][1]}</h4><ul><li><a href="{url(lang, '/guides/')}">{d['nav'][2]}</a></li><li><a href="/company/">회사소개</a></li><li><a href="/contact/">문의</a></li></ul></div></div>
       <div class="flangs">{flangs}</div>
-      <div class="fbot"><span>© 2026 live sub. Stay connected.</span><span class="mono">live-sub.com</span></div>
+      <div class="fbot"><span>© 2026 live sub. Stay connected.</span><span><a href="mailto:support@transtream.app">support@transtream.app</a> · <span class="mono">live-sub.com</span></span></div>
     </div></footer>
     <script>(function(){{document.querySelectorAll('[data-lang]').forEach(function(a){{a.addEventListener('click',function(){{try{{localStorage.setItem('ls_lang',a.dataset.lang)}}catch(e){{}}}})}});var io=new IntersectionObserver(function(es){{es.forEach(function(e){{if(e.isIntersecting){{e.target.classList.add('in');io.unobserve(e.target)}}}})}},{{threshold:.12}});document.querySelectorAll('.rv').forEach(function(el){{io.observe(el)}})}})()</script>
 '''
@@ -493,6 +493,8 @@ def sitemap():
     for p in paths:
         for lang in CODES:
             rows += f'  <url><loc>{SITE}{url(lang, p)}</loc><lastmod>{TODAY}</lastmod></url>\n'
+    for p in ('/company/', '/contact/'):
+        rows += f'  <url><loc>{SITE}{p}</loc><lastmod>{TODAY}</lastmod></url>\n'
     write('sitemap.xml', f'<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n{rows}</urlset>\n')
 
 
