@@ -6,7 +6,7 @@ Edit the data below, rebuild, commit the generated HTML.
 import json, os, datetime
 
 SITE = 'https://live-sub.com'
-CSS_V = 'r5'
+CSS_V = 'r6'
 TODAY = datetime.date.today().isoformat()
 BOT_RE = 'bot|crawl|spider|slurp|google|bing|naver|yeti|daum|lighthouse|facebookexternalhit'
 
@@ -165,6 +165,68 @@ L = {
  ),
 }
 PLAY = 'https://play.google.com/store/apps/details?id=com.healthyroutine.app'
+
+# Ads are assigned one per page type, in the same order they were supplied.
+# Page types beyond the tenth wrap around so every published page still gets
+# exactly one unit without loading several third-party ads at once.
+AD_UNITS = [
+    '<script data-cfasync="false" src="https://abscloud.org/1/d012c9eaba66a99c4c2903e4c3a51d7a"></script>',
+    '<script data-cfasync="false" src="https://bauval.org/14/4d8a0deb5e15486bb193f1f905aebf81"></script>',
+    '<a class="ad-smartlink" href="https://araplhn.org/4/8b88d3d687077c93a04cc942e8e0f9b2" target="_blank" rel="sponsored noopener">Sponsored</a>',
+    '<script async data-cfasync="false" src="https://bauval.org/21/296a6487695e4d009dba78c2f735f3fb"></script><div id="container-296a6487695e4d009dba78c2f735f3fb"></div>',
+    '<script>atOptions={"key":"1f8e9e270b8ba4f0fac91a772db12f34","format":"iframe","height":60,"width":468,"params":{}};</script><script src="https://bauval.org/22/1f8e9e270b8ba4f0fac91a772db12f34"></script>',
+    '<script>atOptions={"key":"a769a622357873dec1ef518c84aad46b","format":"iframe","height":250,"width":300,"params":{}};</script><script src="https://bauval.org/22/a769a622357873dec1ef518c84aad46b"></script>',
+    '<script>atOptions={"key":"8545233c4127f1f0ee367b36a3e1e4fc","format":"iframe","height":600,"width":160,"params":{}};</script><script src="https://bauval.org/22/8545233c4127f1f0ee367b36a3e1e4fc"></script>',
+    '<script>atOptions={"key":"59b76413d6b49139c030fa25634123f1","format":"iframe","height":300,"width":160,"params":{}};</script><script src="https://bauval.org/22/59b76413d6b49139c030fa25634123f1"></script>',
+    '<script>atOptions={"key":"e88050405f2dbdf5dd9849e8b7469e98","format":"iframe","height":50,"width":320,"params":{}};</script><script src="https://bauval.org/22/e88050405f2dbdf5dd9849e8b7469e98"></script>',
+    '<script>atOptions={"key":"e6889ebd6a64668f6763b011fcd34a70","format":"iframe","height":90,"width":728,"params":{}};</script><script src="https://bauval.org/22/e6889ebd6a64668f6763b011fcd34a70"></script>',
+]
+
+AD_LAYOUTS = [
+    'overlay',   # Popunder
+    'overlay',   # Social bar
+    'smartlink', # Smartlink
+    'native',    # Native banner
+    'banner',    # 468x60
+    'banner',    # 300x250
+    'sidebar',   # 160x600
+    'sidebar',   # 160x300
+    'banner',    # 320x50
+    'banner',    # 728x90
+]
+
+PAGE_AD_ORDER = {
+    '/': 0,
+    '/healthyroutine/': 1,
+    '/guides/': 2,
+    **{f'/guides/{g[0]}-live-translation/': i + 3 for i, g in enumerate(GUIDES)},
+}
+
+
+def ad_slot(path):
+    index = PAGE_AD_ORDER[path] % len(AD_UNITS)
+    unit = AD_UNITS[index]
+    layout = AD_LAYOUTS[index]
+    return f'    <aside class="ad-slot ad-{layout}" aria-label="Sponsored">{unit}</aside>\n'
+
+
+def ad_unit(index, extra_class=''):
+    classes = f'ad-slot ad-{AD_LAYOUTS[index]}'
+    if extra_class:
+        classes += f' {extra_class}'
+    return f'    <aside class="{classes}" aria-label="Sponsored">{AD_UNITS[index]}</aside>\n'
+
+
+def home_ad_top():
+    # Non-visual units, the wide top banner, and both desktop side rails.
+    return (ad_unit(0) + ad_unit(1) + ad_unit(9, 'ad-top') +
+            ad_unit(6, 'ad-sidebar-right') + ad_unit(7, 'ad-sidebar-left'))
+
+
+def home_ad_bottom():
+    # Every remaining unit gets its own distinct slot on the landing page.
+    units = ''.join(ad_unit(i, 'ad-home-unit') for i in (2, 3, 4, 5, 8))
+    return f'    <section class="ad-home-grid" aria-label="Sponsored">\n{units}    </section>\n'
 
 # ---------------------------------------------------------------- languages
 import sys
@@ -373,7 +435,7 @@ def home(lang):
     caps = json.dumps([c[1] for c in d['caps']], ensure_ascii=False)
     items = [{"@type": "ListItem", "position": i + 1, "item": {"@type": "MobileApplication" if s[0] == 'health' else "WebSite", "name": sname(s, lang), "alternateName": ALT.get(sname(s, lang), ''), "url": (SITE + url(lang, s[3])) if s[3].startswith('/') else s[3], "description": sdesc(s, lang)}} for i, s in enumerate(SITES)]
     ld = {"@context": "https://schema.org", "@graph": [org_ld(lang), {"@type": "WebSite", "@id": SITE + "/#website", "name": "live sub", "url": SITE + "/", "inLanguage": lang, "publisher": {"@id": SITE + "/#org"}}, {"@type": "ItemList", "name": "live sub family sites", "itemListElement": items}]}
-    html = head(lang, d['home_title'], d['home_desc'], '/', True, ld) + chrome_top(lang, '/') + f'''    <main>
+    html = head(lang, d['home_title'], d['home_desc'], '/', True, ld) + chrome_top(lang, '/') + home_ad_top() + f'''    <main>
       <section class="hero" id="transtream"><div class="gridbg"></div><div class="wrap">
         <span class="pill rv"><em>LIVE</em>{d['pill']}</span>
         <h1 class="rv">{d['h1']}</h1>
@@ -403,7 +465,7 @@ def home(lang):
       </div></section>
       <div class="wrap"><section class="final rv"><h2>{d['fin']}</h2><p>{d['finS']}</p><a class="btn btn-lime" href="https://transtream.app" target="_blank" rel="noopener">{d['start']} ↗</a></section></div>
     </main>
-''' + chrome_bottom(lang, '/') + f'''    <script>(function(){{var caps={caps},i=0,out=document.getElementById('capout'),chips=document.querySelectorAll('.chip-lang span');setInterval(function(){{i=(i+1)%caps.length;out.style.opacity=0;setTimeout(function(){{out.textContent=caps[i];out.style.opacity=1;chips.forEach(function(c,j){{c.classList.toggle('on',j===i)}})}},300)}},3200)}})()</script>
+''' + home_ad_bottom() + chrome_bottom(lang, '/') + f'''    <script>(function(){{var caps={caps},i=0,out=document.getElementById('capout'),chips=document.querySelectorAll('.chip-lang span');setInterval(function(){{i=(i+1)%caps.length;out.style.opacity=0;setTimeout(function(){{out.textContent=caps[i];out.style.opacity=1;chips.forEach(function(c,j){{c.classList.toggle('on',j===i)}})}},300)}},3200)}})()</script>
   </body>
 </html>
 '''
@@ -424,7 +486,7 @@ def guides_index(lang):
       <section class="sec sec-tight"><div class="wrap"><div class="eyebrow rv">{d['g_streams']}</div><div class="gcards">{cards('stream')}</div></div></section>
       <section class="sec sec-tight"><div class="wrap"><div class="eyebrow rv">{d['g_meetings']}</div><div class="gcards">{cards('meeting')}</div><p class="note">{d['g_note']}</p></div></section>
     </main>
-''' + chrome_bottom(lang, '/guides/') + '  </body>\n</html>\n'
+''' + ad_slot('/guides/') + chrome_bottom(lang, '/guides/') + '  </body>\n</html>\n'
     write(out_path(lang, '/guides/'), html)
 
 
@@ -463,7 +525,7 @@ def guide_page(lang, g):
       <p class="note">{d['notice'](g)}</p>
       {f'<h2>{d["related"]}</h2><div class="glist">{rel}</div>' if rel else ''}
     </main>
-''' + chrome_bottom(lang, path) + '  </body>\n</html>\n'
+''' + ad_slot(path) + chrome_bottom(lang, path) + '  </body>\n</html>\n'
     write(out_path(lang, path), html)
 
 
@@ -483,7 +545,7 @@ def healthy(lang):
       </div></section>
       <section class="sec sec-tight"><div class="wrap"><div class="steps">{feats}</div><p class="note">{d['hr_note']}</p></div></section>
     </main>
-''' + chrome_bottom(lang, path) + '  </body>\n</html>\n'
+''' + ad_slot(path) + chrome_bottom(lang, path) + '  </body>\n</html>\n'
     write(out_path(lang, path), html)
 
 
