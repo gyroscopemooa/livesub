@@ -223,10 +223,11 @@ def home_ad_top():
             ad_unit(6, 'ad-sidebar-right') + ad_unit(7, 'ad-sidebar-left'))
 
 
-def home_ad_bottom():
+def home_ad_bottom(leading_blank=False):
     # Every remaining unit gets its own distinct slot on the landing page.
     units = ''.join(ad_unit(i, 'ad-home-unit') for i in (2, 3, 4, 5, 8))
-    return f'    <section class="ad-home-grid" aria-label="Sponsored">\n{units}    </section>\n'
+    blank = '    \n' if leading_blank else ''
+    return f'{blank}    <section class="ad-home-grid" aria-label="Sponsored">\n{units}    </section>\n'
 
 # ---------------------------------------------------------------- languages
 import sys
@@ -477,7 +478,7 @@ def guides_index(lang):
     def cards(kind):
         return ''.join(f'<a class="gcard rv" href="{url(lang, "/guides/" + g[0] + "-live-translation/")}"><small>{"LIVE STREAM" if kind == "stream" else "MEETING · CALL"}</small><h3>{gname(g, lang)}</h3><p>{(g[5] if lang == "ko" else g[6])}</p><span class="go">→</span></a>' for g in GUIDES if g[1] == kind)
     ld = {"@context": "https://schema.org", "@type": "CollectionPage", "name": d['g_title'], "url": SITE + url(lang, '/guides/'), "inLanguage": lang, "publisher": org_ld(lang)}
-    html = head(lang, d['g_title'], d['g_desc'], '/guides/', True, ld) + chrome_top(lang, '/guides/') + f'''    <main>
+    html = head(lang, d['g_title'], d['g_desc'], '/guides/', True, ld) + chrome_top(lang, '/guides/') + home_ad_top() + f'''    <main>
       <section class="hero hero-sm"><div class="gridbg"></div><div class="wrap">
         <span class="pill rv"><em>GUIDES</em>{d['gE']}</span>
         <h1 class="rv">{d['g_h1']}</h1>
@@ -486,7 +487,7 @@ def guides_index(lang):
       <section class="sec sec-tight"><div class="wrap"><div class="eyebrow rv">{d['g_streams']}</div><div class="gcards">{cards('stream')}</div></div></section>
       <section class="sec sec-tight"><div class="wrap"><div class="eyebrow rv">{d['g_meetings']}</div><div class="gcards">{cards('meeting')}</div><p class="note">{d['g_note']}</p></div></section>
     </main>
-''' + ad_slot('/guides/') + chrome_bottom(lang, '/guides/') + '  </body>\n</html>\n'
+''' + home_ad_bottom(True) + chrome_bottom(lang, '/guides/') + '  </body>\n</html>\n'
     write(out_path(lang, '/guides/'), html)
 
 
@@ -511,7 +512,7 @@ def guide_page(lang, g):
             {"@type": "ListItem", "position": 2, "name": d['nav'][2], "item": SITE + url(lang, '/guides/')},
             {"@type": "ListItem", "position": 3, "name": name, "item": SITE + url(lang, path)}]}]}
     tips_html = f'<h2>{d["tips"]}</h2><ul>{li(tips)}</ul>' if tips else ''
-    html = head(lang, title, d['gp_desc'](g), path, True, ld, 'article') + chrome_top(lang, path) + f'''    <main class="article wrap">
+    html = head(lang, title, d['gp_desc'](g), path, True, ld, 'article') + chrome_top(lang, path) + home_ad_top() + f'''    <main class="article wrap">
       <a class="back" href="{url(lang, '/guides/')}">{d['back']}</a>
       <div class="eyebrow">{g[4] if lang == 'ko' else 'REAL-TIME TRANSLATION GUIDE'}</div>
       <h1>{d['gp_h1'](g)}</h1>
@@ -525,7 +526,7 @@ def guide_page(lang, g):
       <p class="note">{d['notice'](g)}</p>
       {f'<h2>{d["related"]}</h2><div class="glist">{rel}</div>' if rel else ''}
     </main>
-''' + ad_slot(path) + chrome_bottom(lang, path) + '  </body>\n</html>\n'
+''' + home_ad_bottom(True) + chrome_bottom(lang, path) + '  </body>\n</html>\n'
     write(out_path(lang, path), html)
 
 
@@ -536,7 +537,7 @@ def healthy(lang):
     ld = {"@context": "https://schema.org", "@type": "MobileApplication", "name": d['hr_name'], "alternateName": ALT[d['hr_name']], "operatingSystem": "Android",
           "applicationCategory": "HealthApplication", "url": SITE + url(lang, path), "installUrl": PLAY, "inLanguage": lang,
           "offers": {"@type": "Offer", "price": "0", "priceCurrency": "KRW"}, "description": d['hr_desc'], "publisher": org_ld(lang)}
-    html = head(lang, d['hr_title'], d['hr_desc'], path, True, ld) + chrome_top(lang, path) + f'''    <main>
+    html = head(lang, d['hr_title'], d['hr_desc'], path, True, ld) + chrome_top(lang, path) + home_ad_top() + f'''    <main>
       <section class="hero hero-sm"><div class="gridbg"></div><div class="wrap">
         <span class="pill rv"><em>APP</em>{d['hr_name']}</span>
         <h1 class="rv">{d['hr_h1']}</h1>
@@ -545,7 +546,7 @@ def healthy(lang):
       </div></section>
       <section class="sec sec-tight"><div class="wrap"><div class="steps">{feats}</div><p class="note">{d['hr_note']}</p></div></section>
     </main>
-''' + ad_slot(path) + chrome_bottom(lang, path) + '  </body>\n</html>\n'
+''' + home_ad_bottom(True) + chrome_bottom(lang, path) + '  </body>\n</html>\n'
     write(out_path(lang, path), html)
 
 
@@ -560,6 +561,34 @@ def sitemap():
     write('sitemap.xml', f'<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n{rows}</urlset>\n')
 
 
+def not_found():
+    """Create a real Cloudflare Pages 404 instead of the default SPA fallback."""
+    write('404.html', '''<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#07080b" />
+    <title>페이지를 찾을 수 없습니다 | live sub</title>
+    <meta name="description" content="요청하신 페이지를 찾을 수 없습니다. live sub 홈이나 플랫폼 가이드에서 원하는 내용을 찾아보세요." />
+    <meta name="robots" content="noindex, follow" />
+    <link rel="stylesheet" href="/home.css?v=''' + CSS_V + '''" />
+  </head>
+  <body>
+    <div class="aurora" aria-hidden="true"></div>
+    <main>
+      <section class="hero hero-sm"><div class="gridbg"></div><div class="wrap">
+        <span class="pill"><em>404</em>NOT FOUND</span>
+        <h1>페이지를 찾을 수 없습니다.</h1>
+        <p class="lede">주소가 변경되었거나 삭제된 페이지입니다.<br />The page may have moved or no longer exists.</p>
+        <div class="cta"><a class="btn btn-lime" href="/">홈으로 돌아가기</a><a class="btn btn-ghost" href="/guides/">플랫폼 가이드 보기</a></div>
+      </div></section>
+    </main>
+  </body>
+</html>
+''')
+
+
 for lang in CODES:
     home(lang)
     guides_index(lang)
@@ -567,4 +596,5 @@ for lang in CODES:
     for g in GUIDES:
         guide_page(lang, g)
 sitemap()
+not_found()
 print('built', len(CODES) * (3 + len(GUIDES)), 'pages')
