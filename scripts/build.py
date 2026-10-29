@@ -7,6 +7,14 @@ import json, os, datetime
 
 SITE = 'https://live-sub.com'
 CSS_V = 'r7'
+GOOGLE_TAG = '''    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-VC374F0GFL"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-VC374F0GFL');
+    </script>'''
 TODAY = datetime.date.today().isoformat()
 BOT_RE = 'bot|crawl|spider|slurp|google|bing|naver|yeti|daum|lighthouse|facebookexternalhit'
 
@@ -333,6 +341,7 @@ def head(lang, title, desc, path, alt_path, ld, og_type='website'):
     return f'''<!doctype html>
 <html lang="{lang}"{rtl}>
   <head>
+{GOOGLE_TAG}
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#07080b" />
@@ -567,6 +576,7 @@ def not_found():
     write('404.html', '''<!doctype html>
 <html lang="ko">
   <head>
+''' + GOOGLE_TAG + '''
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#07080b" />
